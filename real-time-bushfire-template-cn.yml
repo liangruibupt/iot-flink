@@ -439,7 +439,7 @@ Resources:
               command: 'aws s3 cp s3://ray-datalake-lab/realtime-bushfire/dashboard.json /opt/iot-simulator/sample-content/dashboard.json --region ${AWS::Region}'
               cwd: '/opt/iot-simulator/elasticsearch'
             "06-get-es-proxy":
-              command: 'aws s3 cp s3://ray-datalake-lab/realtime-bushfire/aws-es-proxy /opt/iot-simulator/sample-content/aws-es-proxy --region ${AWS::Region}'
+              command: 'wget https://github.com/abutaha/aws-es-proxy/releases/download/v1.0/aws-es-proxy-1.0-linux-amd64'
               cwd: '/opt/iot-simulator/elasticsearch'
             "07-get-iot-jar":
               command: 'aws s3 cp s3://ray-datalake-lab/realtime-bushfire/iot-simulator-latest.jar /opt/iot-simulator/iot-simulator-latest.jar --region ${AWS::Region}'
@@ -467,7 +467,7 @@ Resources:
             "10-fix-permission":
               command: "chown -R ec2-user /opt/iot-simulator && chmod -R go-rwx /opt/iot-simulator"
             "11-run-es-proxy":
-              command: !Sub 'chmod +x /opt/iot-simulator/sample-content/aws-es-proxy ; su ec2-user -c "nohup /opt/iot-simulator/sample-content/aws-es-proxy -endpoint https://${ESDomain.DomainEndpoint} -log-to-file > /dev/null 2>&1 &"'
+              command: !Sub 'chmod +x ./aws-es-proxy-1.0-linux-amd64 ; su ec2-user -c "nohup ./aws-es-proxy-1.0-linux-amd64 -endpoint https://${ESDomain.DomainEndpoint} -log-to-file > /dev/null 2>&1 &"'
               cwd: '/opt/iot-simulator/elasticsearch'
             "12-create-es-mapping":
               command: 'curl -XPUT http://localhost:9200/weather-sensor-data/ -H "Content-Type: application/json" -d @/opt/iot-simulator/sample-content/mapping.json'
